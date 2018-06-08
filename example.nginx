@@ -1,0 +1,73 @@
+user www-data;
+worker_processes 4;
+pid /run/nginx.pid;
+
+events {
+    worker_connections 100000;
+}
+
+worker_rlimit_nofile 200000; # 2 * worker_connections
+
+http {
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+
+    error_log /dev/null;
+    access_log /dev/null;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    server {
+        listen 80 so_keepalive=10s:10s:8;
+        server_name onion.gq www.onion.gq;
+        location / {
+            default_type text/html;
+            root /var/www/onion2web/;
+        }
+    }
+
+    # For monitoring
+    # www.pastagdsp33j7aoq.onion.gq without confirmation
+    server {
+        listen 80;
+        server_name www.pastagdsp33j7aoq.onion.gq;
+        lua_check_client_abort on;
+        location / {
+            default_type text/html;
+            content_by_lua '
+                require("onion2web").handle_onion2web(
+                    ".onion.gq", nil, nil, false
+                );
+            ';
+        }
+    }
+
+    server {
+        listen 80;
+        server_name *.onion.gq;
+        lua_check_client_abort on;
+        location / {
+            default_type text/html;
+            content_by_lua '
+                if not blocklist then
+	            blocklist = {}
+                    local f = io.open("/etc/blocklist.txt")
+                    if f then
+	                for host_md5 in f:lines() do
+		            blocklist[host_md5] = true
+	                end
+                        f:close()
+                    end
+                end
+                require("onion2web").handle_onion2web(".onion.gq",
+                    nil, nil, true, blocklist);
+            ';
+        }
+    }
+
+}
