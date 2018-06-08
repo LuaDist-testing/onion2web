@@ -1,16 +1,16 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "onion2web"
-version = "1.5-1"
+version = "1.6-1"
 -- LuaDist source
 source = {
-  tag = "1.5-1",
+  tag = "1.6-1",
   url = "git://github.com/LuaDist-testing/onion2web.git"
 }
 -- Original source
 -- source = {
 --     url = 'git://github.com/starius/onion2web',
---     tag = '1.5',
+--     tag = '1.6',
 -- }
 description = {
     summary = "Access .onion sites without Tor Browser",
@@ -20,7 +20,7 @@ description = {
 }
 dependencies = {
     "lua ~> 5.1",
-    "socks5 >= 1.5"
+    "socks5 >= 1.6"
 }
 build = {
     type = "builtin",
