@@ -1,16 +1,16 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "onion2web"
-version = "1.2-1"
+version = "1.3-1"
 -- LuaDist source
 source = {
-  tag = "1.2-1",
+  tag = "1.3-1",
   url = "git://github.com/LuaDist-testing/onion2web.git"
 }
 -- Original source
 -- source = {
 --     url = 'git://github.com/starius/onion2web',
---     tag = 'master',
+--     tag = '1.3',
 -- }
 description = {
     summary = "Access .onion sites without Tor Browser",

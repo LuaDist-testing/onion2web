@@ -12,7 +12,7 @@ description = {
 }
 dependencies = {
     "lua ~> 5.1",
-    "socks5 >= 1.7"
+    "socks5 >= 1.5"
 }
 build = {
     type = "builtin",

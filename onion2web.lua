@@ -58,8 +58,6 @@ that you have understood:
 </form>
 </center>
 
-<a href="https://ahmia.fi/blacklist/">Report the site</a>
-
 <a href="https://github.com/starius/onion2web">
 <img style="position: absolute; top: 0; right: 0; border: 0;"
 src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
@@ -72,28 +70,19 @@ alt="Fork me on GitHub"
 end
 
 onion2web.handle_onion2web = function(onion_replacement,
-        torhost, torport, confirmation, blocklist)
+        torhost, torport, confirmation)
     if not torhost then
         torhost = '127.0.0.1'
     end
     if not torport then
         torport = 9050
     end
-    if confirmation == nil then
-        confirmation = true
-    end
-    local host = ngx.req.get_headers()['Host']
-    -- Check against the blocklist.
-    local onion = host:match(hidden_base) .. '.onion'
-    local digest = ngx.md5(onion)
-    if blocklist and blocklist[digest] then
-        ngx.say('Domain ' .. host .. ' is blocked ' ..
-                'in the name of good and justice')
-        return
+    if not confirmation then
+        confirmation = false
     end
     local repl = hidden_base .. onion_replacement
-    if not host:match('^' .. repl .. '$') and
-            not host:match('%.' .. repl .. '$') then
+    local host = ngx.req.get_headers()['Host']
+    if not host:match('^' .. repl .. '$') then
         ngx.say('Bad domain: ' .. host)
         return
     end
@@ -104,7 +93,6 @@ onion2web.handle_onion2web = function(onion_replacement,
         show_confirmation_form()
         return
     end
-    local change_only_html = true
     socks5.handle_request(torhost, torport,
     function(clheader)
         return clheader
@@ -116,9 +104,7 @@ onion2web.handle_onion2web = function(onion_replacement,
     function(soheader)
         return soheader
         :gsub(hidden_onion, "%1" .. onion_replacement)
-    end,
-    change_only_html
-    )
+    end)
 end
 
 return onion2web
