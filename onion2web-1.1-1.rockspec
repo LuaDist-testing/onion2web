@@ -1,10 +1,10 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "onion2web"
-version = "1.0-1"
+version = "1.1-1"
 -- LuaDist source
 source = {
-  tag = "1.0-1",
+  tag = "1.1-1",
   url = "git://github.com/LuaDist-testing/onion2web.git"
 }
 -- Original source
